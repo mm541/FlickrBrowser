@@ -1,16 +1,25 @@
 package com.example.flickrbrowser
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flickrbrowser.databinding.ActivityMainBinding
 
 private const val TAG = "MainActivity"
-class MainActivity : AppCompatActivity(),GetRawData.OnDownloadComplete,GetFlickrJson.OnDataAvailable {
+const val FLICKR_QUERY = "FLICKR_QUERY"
+const val PHOTO_TRANSFER = "FLICKR_QUERY"
+class MainActivity : AppCompatActivity(),
+    GetRawData.OnDownloadComplete,
+    GetFlickrJson.OnDataAvailable,
+    RecyclerItemClickListener.OnRecyclerItemClick
+{
 
 //    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
@@ -26,6 +35,7 @@ class MainActivity : AppCompatActivity(),GetRawData.OnDownloadComplete,GetFlickr
 
         Log.d(TAG,"onCreate called")
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.addOnItemTouchListener(RecyclerItemClickListener(this,binding.recyclerView,this))
         binding.recyclerView.adapter = flickrRecyclerViewAdapter
         val getRawData = GetRawData(this)
         val url = createUri("https://www.flickr.com/services/feeds/photos_public.gne","android,oreo","en-us",true)
@@ -33,6 +43,22 @@ class MainActivity : AppCompatActivity(),GetRawData.OnDownloadComplete,GetFlickr
         getRawData.execute(url)
         Log.d(TAG,"onCreate end")
     }
+    override fun onCLickItem(view: View, position: Int) {
+        Log.d(TAG,"onCLickItem() called and position of child item is $position")
+        Toast.makeText(this,"Normal tap at position $position",Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onLongCLickItem(view: View, position: Int) {
+        Log.d(TAG,"onLongCLickItem() called and position of child item is $position")
+        val photo = flickrRecyclerViewAdapter.getPhotos(position)
+        if(photo != null) {
+            val intent = Intent(this,PhotoDetailsActivity::class.java)
+            intent.putExtra(PHOTO_TRANSFER,photo)
+            startActivity(intent)
+        }
+        Toast.makeText(this,"Long tap at position $position",Toast.LENGTH_SHORT).show()
+    }
+
 
     private fun createUri(baseUrl: String, tags: String, lang: String, tagMode: Boolean): String {
        return Uri.parse(baseUrl).
@@ -84,5 +110,4 @@ class MainActivity : AppCompatActivity(),GetRawData.OnDownloadComplete,GetFlickr
         Log.d(TAG,"Parsing error: ${e.message}")
     }
 
-
-}
+                    }

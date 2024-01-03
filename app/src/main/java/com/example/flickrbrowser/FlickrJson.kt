@@ -4,7 +4,6 @@ import android.os.AsyncTask
 import android.util.Log
 import org.json.JSONException
 import org.json.JSONObject
-import java.lang.Exception
 
 class GetFlickrJson(private val listener:OnDataAvailable):AsyncTask<String,Void,ArrayList<Photo>>() {
     private val TAG = "GetFlickrJson"
@@ -28,7 +27,7 @@ class GetFlickrJson(private val listener:OnDataAvailable):AsyncTask<String,Void,
                 val jsonMedia = photoItem.getJSONObject("media")
                 val imageUrl = jsonMedia.getString("m")
                 val link = imageUrl.replace("_m.jpg","_b.jpg")
-                val photo = Photo(title, author, authorId, tags, link, imageUrl)
+                val photo = Photo(title, author, authorId, link,tags,imageUrl)
                 result.add(photo)
             }
        }catch (e:JSONException) {
