@@ -19,6 +19,7 @@
         <activity
             android:name=".PhotoDetailsActivity"
             android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.FlickrBrowser"
             android:label="PhotoDetailsActivity">
         <meta-data
             android:name="android.support.MainActivity"
@@ -28,7 +29,9 @@
         <activity
             android:name=".SearchActivity"
             android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.FlickrBrowser"
             android:label="SearchActivity">
+
             <meta-data
                 android:name="android.support.MainActivity"
                 android:value="com.example.flickrbrowser.MainActivity"/>
