@@ -9,12 +9,14 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flickrbrowser.databinding.ActivityMainBinding
 
 private const val TAG = "MainActivity"
 const val FLICKR_QUERY = "FLICKR_QUERY"
 const val PHOTO_TRANSFER = "PHOTO_TRANSFER"
+private var tagsParameter:String = "cats"
 class MainActivity : AppCompatActivity(),
     GetRawData.OnDownloadComplete,
     GetFlickrJson.OnDataAvailable,
@@ -22,6 +24,7 @@ class MainActivity : AppCompatActivity(),
 {
 
 //    private lateinit var appBarConfiguration: AppBarConfiguration
+
     private lateinit var binding: ActivityMainBinding
     private val flickrRecyclerViewAdapter:FlickrRecyclerViewAdapter = FlickrRecyclerViewAdapter(
         ArrayList()
@@ -37,10 +40,7 @@ class MainActivity : AppCompatActivity(),
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.addOnItemTouchListener(RecyclerItemClickListener(this,binding.recyclerView,this))
         binding.recyclerView.adapter = flickrRecyclerViewAdapter
-        val getRawData = GetRawData(this)
-        val url = createUri("https://www.flickr.com/services/feeds/photos_public.gne","android,oreo","en-us",true)
 
-        getRawData.execute(url)
         Log.d(TAG,"onCreate end")
     }
     override fun onCLickItem(view: View, position: Int) {
@@ -114,7 +114,15 @@ class MainActivity : AppCompatActivity(),
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG,"onResume() called")
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val tags = sharedPref.getString(FLICKR_QUERY,"")
+        if (tags != null) {
+            if(tags.isNotEmpty())
+                tagsParameter = tags
+        }
+        val getRawData = GetRawData(this)
+        val url = createUri("https://www.flickr.com/services/feeds/photos_public.gne",tagsParameter,"en-us",true)
+        getRawData.execute(url)
 
     }
 

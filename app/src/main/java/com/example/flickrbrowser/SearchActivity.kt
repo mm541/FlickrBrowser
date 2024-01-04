@@ -36,7 +36,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
                 sharedPref.edit().putString(FLICKR_QUERY,query).apply()
-//                searchView?.clearFocus()
+                searchView?.clearFocus() //Test it and analyze what it does
                 finish()
                 return true
             }
@@ -46,6 +46,13 @@ class SearchActivity : AppCompatActivity() {
             }
 
         })
+        searchView?.setOnCloseListener ( object: SearchView.OnCloseListener {
+            override fun onClose(): Boolean {
+                finish()
+                return false
+            }
+
+        } )
         return true
     }
 
