@@ -45,4 +45,6 @@
     </string>
     <string name="title_activity_main2">MainActivity2</string>
     <string name="enter_how_much_cookies_you_want">Enter How Much Cookies You Want</string>
+    <string name="search_item">Search</string>
+    <string name="input_tags">input tags</string>
 </resources>

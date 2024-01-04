@@ -14,7 +14,7 @@ import com.example.flickrbrowser.databinding.ActivityMainBinding
 
 private const val TAG = "MainActivity"
 const val FLICKR_QUERY = "FLICKR_QUERY"
-const val PHOTO_TRANSFER = "FLICKR_QUERY"
+const val PHOTO_TRANSFER = "PHOTO_TRANSFER"
 class MainActivity : AppCompatActivity(),
     GetRawData.OnDownloadComplete,
     GetFlickrJson.OnDataAvailable,
@@ -86,7 +86,9 @@ class MainActivity : AppCompatActivity(),
         // as you specify a parent activity in AndroidManifest.xml.
         Log.d(TAG,"onOptionsItemSelected called")
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.search_item->{startActivity(Intent(this,SearchActivity::class.java))
+                                true
+                        }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -110,4 +112,10 @@ class MainActivity : AppCompatActivity(),
         Log.d(TAG,"Parsing error: ${e.message}")
     }
 
-                    }
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG,"onResume() called")
+
+    }
+
+}
